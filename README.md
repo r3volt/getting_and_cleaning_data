@@ -29,4 +29,8 @@ The data purpose, collection method, etc. is outlined here:
 
 http://archive.ics.uci.edu/ml/datasets/Human+Activity+Recognition+Using+Smartphones
 
+## Helper Information
+
+Getting Started with the Course Project: https://class.coursera.org/getdata-013/forum/thread?thread_id=191
+David's personal course project FAQ: https://class.coursera.org/getdata-013/forum/thread?thread_id=30
 
