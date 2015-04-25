@@ -12,5 +12,8 @@
 vignettes/*.html
 vignettes/*.pdf
 
+# source files
+data/*
+
 # target files
-target/*
+output/*

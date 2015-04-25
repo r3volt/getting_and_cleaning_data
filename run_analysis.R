@@ -1,29 +1,77 @@
 library(dplyr)
 
+## Default Source Variables
+sourceDataDirectory <- "./data"
+sourceDataUrl <- "https://d396qusza40orc.cloudfront.net/getdata%2Fprojectfiles%2FUCI%20HAR%20Dataset.zip"
+sourceDataLocalFileName <- "sourceData.zip"
+sourceDataDirectoryName <- "UCI HAR Dataset"
+sourceDataSets <- c("train", "test")
+
+## Default Output Variables
+outputDataDirectory <- "./output"
+outputDataFileName <- "output.txt"
+
+
 ## Function to identify, get and setup the source data for later analysis.
-setupSourceData <- function(workingDataDirectory="./data") {
+setupSourceData <- function(sourceDataDirectory=sourceDataDirectory, 
+                            sourceDataUrl=sourceDataUrl, 
+                            sourceDataFileName=sourceDataLocalFileName) {
 
   ## Create a working directory for the data if one does not already exist.
-  if (!file.exists(workingDataDirectory)) {
-    dir.create(workingDataDirectory)
-  }   
-  
-  ## Set the Source Data URL
-  zipUrl <- "https://d396qusza40orc.cloudfront.net/getdata%2Fprojectfiles%2FUCI%20HAR%20Dataset.zip"
+  if (!file.exists(sourceDataDirectory)) {
+    dir.create(sourceDataDirectory)
+  }
+  else { 
+    warning("The sourceDataDirectory \"", 
+            sourceDataDirectory, 
+            "\" already existed."
+            )
+  }
   
   ## Set the Local Filename for the Source Data
-  downloadFilePath <- paste(workingDataDirectory, "sourceData.zip", sep="/")
+  downloadFilePath <- paste(sourceDataDirectory, sourceDataFileName, sep="/")
   
   ## If and only if the Source Data does not already exist locally,
   ## download the Source Data and Store Locally.
-  if(!file.exists(downloadFilePath)) {
-    download.file(zipUrl, destfile=downloadFilePath, method="curl")
+  if (!file.exists(downloadFilePath)) {
+    download.file(sourceDataUrl, destfile=downloadFilePath, method="curl")
   }
   
   ## Unzip the Source Data.
   ## N.B. Provided we're not playing in the Source Data tree later, we can do this
   ## idempotently (i.e. every time anew). In fact, probably best to do this anyway.
-  unzip(downloadFilePath, overwrite = TRUE, exdir=workingDataDirectory)
+  unzip(downloadFilePath, overwrite = TRUE, exdir=sourceDataDirectory)
+}
+
+writeOutputData <- function(outputDataFrame, 
+                            outputDataDirectory=outputDataDirectory, 
+                            outputDataFileName=outputDataFileName) {
+  
+  ## Create a output directory for the data if one does not already exist.
+  if (!file.exists(outputDataDirectory)) {
+    dir.create(outputDataDirectory)
+  }
+  else { 
+    warning("The outputDataDirectory \"", 
+            outputDataDirectory, 
+            "\" already existed."
+            )
+  }
+  
+  outputFilePath <- paste(outputDirectory, outputFileName, sep="/")
+  
+  ## Write the output data, using overwrite, if necessary.
+  ## TODO: Insert Warnings here wherever a file would be overwritten.
+  if (file.exists(outputFilePath)) {
+    warning(outputDataFileName, 
+            " was overwritten in \"", 
+            outputDataDirectory, 
+            "\"."
+            )
+  }
+  
+  write.table(outputDataFrame, file = outputFilePath, sep = " ", row.names = FALSE)
+  
 }
 
 ## Create initial data sets for train vs. test
@@ -34,8 +82,18 @@ setupSourceData <- function(workingDataDirectory="./data") {
 ##  subject_test, X_test, y_test OR
 ##  subject_train, X_train, y_train
 ## N.B. This function uses eval() and parse() to make more modular.
-createDataSet <- function(dataDirectory="./data", dataSetName="train") {
-  sourceDataDirectoryName <- "UCI HAR Dataset"
+createDataSet <- function(dataDirectory=sourceDataDirectory, dataSetName) {
+  
+  # Check first to see if the dataSetName is valid
+  if (!(dataSetName %in% sourceDataSets)) {
+    stop("The dataSetName \"", 
+          dataSetName, 
+          "\" does not exist. Processing Halted!", 
+          "\nPlease choose a value from the following: ", 
+          paste(sourceDataSets, collapse = ", ")
+         )
+  }
+  
   dataNames <- c("subject", "X", "y")
 
   for (i in 1:length(dataNames)) {
@@ -78,8 +136,8 @@ createDataSet <- function(dataDirectory="./data", dataSetName="train") {
   df
 }
 
-## Main Run Steps
-dataDirectory <- "./data"
+## Run Steps Below
+## ---------------
 setupSourceData(dataDirectory)
 
 ## Create the Data Sets
@@ -90,10 +148,13 @@ train <- createDataSet(dataDirectory, "train")
 fullDataSet <- rbind(test, train)
 
 # Extracts only the measurements on the mean and standard deviation for each measurement. 
-trimmed <- select(fullDataSet, contains("mean"), contains("std"))
+trimmed <- select(fullDataSet, subject_id, contains("mean"), contains("std"), activity_id)
 
 # TODO: Use descriptive activity names to name the activities in the data set (done in step 1)
 
 # TODO: Appropriately labels the data set with descriptive variable names. 
 
 # TODO: From the data set in step 4, creates a second, independent tidy data set with the average of each variable for each activity and each subject.
+
+## TODO: Output the tidy data set and not the trimmed data set.
+writeOutputData(trimmed, outputDirectory, outputFileName)
