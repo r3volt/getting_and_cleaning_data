@@ -63,7 +63,7 @@ I have included all variables which include "mean" or "std", ignoring case, for 
 
 The only required package is "dplyr" by Hadley Wickham which can be installed from CRAN by running...
 
-  install.pacakages("dplyr")
+    install.pacakages("dplyr")
   
 N.B. curl must be installed on the system running download.file (since it uses HTTPS).
 
@@ -71,7 +71,7 @@ N.B. curl must be installed on the system running download.file (since it uses H
 
 To use this script, simply source the script using the following:
 
-  source("run_analysis.R")
+    source("run_analysis.R")
 
 The script, by default, will create a data directory, download and unzip the source data and then create and write the output.
 
