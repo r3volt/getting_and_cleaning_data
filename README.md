@@ -9,7 +9,8 @@ This repository contains files for the Getting and Cleaning Data Course Project.
 - [Approach](#approach)
 - [Running the Analysis](#running-the-analysis)
   - [Required Packages](#required-packages)
-
+  - [Running the Script](#running-the-script)
+  
 ## Course Instructions
 
 Here are the required outcomes:
