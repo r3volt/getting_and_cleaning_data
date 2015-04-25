@@ -43,7 +43,7 @@ You will be required to submit:
 
 This is a high-level description of the approach. 
 
-In-depth detail on the output dataset can be found in the [Codebook](Codebook.md).
+In-depth detail on the output dataset can be found in the [CodeBook](CodeBook.md).
 
 #### Source Data
 
