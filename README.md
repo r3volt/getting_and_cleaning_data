@@ -2,15 +2,22 @@
 
 This repository contains files for the Getting and Cleaning Data Course Project.
 
+
 ## Table of contents
 
 - [Course Instructions](#course-instructions)
 - [Submission Requirements](#submission-requirements)
-- [Approach](#approach)
+- [Approach Outline](#approach-outline)
+  - [Source Data](#source-data)
+  - [Helper Information](#helper-information)
+- [About the Output Data Sets](#about-the-output-data-sets)
+  - [Trimmed Data Set](#trimmed-data-set)
+  - [Tidy Data Set](#tidy-data-set)
 - [Running the Analysis](#running-the-analysis)
   - [Required Packages](#required-packages)
   - [Running the Script](#running-the-script)
-  
+
+
 ## Course Instructions
 
 Here are the required outcomes:
@@ -32,9 +39,11 @@ You will be required to submit:
 0. A README.md in the repo with your scripts. This file explains how all of the scripts work and how they are connected.  
 
 
-## Approach
+## Approach Outline
 
-...
+This is a high-level description of the approach. 
+
+In-depth detail on the output dataset can be found in the [Codebook](Codebook.md).
 
 #### Source Data
 
@@ -48,16 +57,25 @@ http://archive.ics.uci.edu/ml/datasets/Human+Activity+Recognition+Using+Smartpho
 
 #### Helper Information
 
-Getting Started with the Course Project: https://class.coursera.org/getdata-013/forum/thread?thread_id=191
-David's personal course project FAQ: https://class.coursera.org/getdata-013/forum/thread?thread_id=30
+Getting Started with the Course Project
 
-#### Trimmed Data
+- https://class.coursera.org/getdata-013/forum/thread?thread_id=191
+
+David's personal course project FAQ
+
+- https://class.coursera.org/getdata-013/forum/thread?thread_id=30
+
+
+## About the Output Data Sets
+
+#### Trimmed Data Set
 
 I have included all variables which include "mean" or "std", ignoring case, for the meanwhile since they are latitudinal measures in the original data set for which resolution to recreate would be unavailable in a later data set.
 
-#### Tidy Data
+#### Tidy Data Set
 
 ...
+
 
 ## Running the Analysis
 
