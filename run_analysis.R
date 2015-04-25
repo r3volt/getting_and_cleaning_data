@@ -1,75 +1,73 @@
 library(dplyr)
 
 ## Default Source Variables
-sourceDataDirectory <- "./data"
-sourceDataUrl <- "https://d396qusza40orc.cloudfront.net/getdata%2Fprojectfiles%2FUCI%20HAR%20Dataset.zip"
-sourceDataLocalFileName <- "sourceData.zip"
+sourceDirectory <- "./data"
+sourceRemoteUrl <- "https://d396qusza40orc.cloudfront.net/getdata%2Fprojectfiles%2FUCI%20HAR%20Dataset.zip"
+sourceLocalFileName <- "sourceData.zip"
 sourceDataDirectoryName <- "UCI HAR Dataset"
 sourceDataSets <- c("train", "test")
 
 ## Default Output Variables
-outputDataDirectory <- "./output"
+outputDataDirectoryName <- "./output"
 outputDataFileName <- "output.txt"
 
 
 ## Function to identify, get and setup the source data for later analysis.
-setupSourceData <- function(sourceDataDirectory=sourceDataDirectory, 
-                            sourceDataUrl=sourceDataUrl, 
-                            sourceDataFileName=sourceDataLocalFileName) {
+setupSourceData <- function(localDirectoryName=sourceDirectory, 
+                            remoteUrl=sourceRemoteUrl, 
+                            localFileName=sourceLocalFileName) {
 
   ## Create a working directory for the data if one does not already exist.
-  if (!file.exists(sourceDataDirectory)) {
-    dir.create(sourceDataDirectory)
+  if (!file.exists(localDirectoryName)) {
+    dir.create(localDirectoryName)
   }
   else { 
-    warning("The sourceDataDirectory \"", 
-            sourceDataDirectory, 
+    warning("The localDirectoryName \"", 
+            localDirectoryName, 
             "\" already existed."
             )
   }
   
   ## Set the Local Filename for the Source Data
-  downloadFilePath <- paste(sourceDataDirectory, sourceDataFileName, sep="/")
+  downloadFilePath <- paste(localDirectoryName, localFileName, sep="/")
   
   ## If and only if the Source Data does not already exist locally,
   ## download the Source Data and Store Locally.
   if (!file.exists(downloadFilePath)) {
-    download.file(sourceDataUrl, destfile=downloadFilePath, method="curl")
+    download.file(remoteUrl, destfile=downloadFilePath, method="curl")
   }
   
   ## Unzip the Source Data.
   ## N.B. Provided we're not playing in the Source Data tree later, we can do this
   ## idempotently (i.e. every time anew). In fact, probably best to do this anyway.
-  unzip(downloadFilePath, overwrite = TRUE, exdir=sourceDataDirectory)
+  unzip(downloadFilePath, overwrite = TRUE, exdir=localDirectoryName)
 }
 
 writeOutputData <- function(outputDataFrame, 
-                            outputDataDirectory=outputDataDirectory, 
-                            outputDataFileName=outputDataFileName) {
+                            outputDirectoryName=outputDataDirectoryName, 
+                            outputFileName=outputDataFileName) {
   
   ## Create a output directory for the data if one does not already exist.
-  if (!file.exists(outputDataDirectory)) {
-    dir.create(outputDataDirectory)
+  if (!file.exists(outputDirectoryName)) {
+    dir.create(outputDirectoryName)
   }
   else { 
-    warning("The outputDataDirectory \"", 
-            outputDataDirectory, 
+    warning("The outputDirectoryName \"", 
+            outputDirectoryName, 
             "\" already existed."
             )
   }
   
-  outputFilePath <- paste(outputDirectory, outputFileName, sep="/")
+  outputFilePath <- paste(outputDirectoryName, outputFileName, sep="/")
   
-  ## Write the output data, using overwrite, if necessary.
-  ## TODO: Insert Warnings here wherever a file would be overwritten.
+  ## Write the output data, overwriting and warning, if necessary.
   if (file.exists(outputFilePath)) {
-    warning(outputDataFileName, 
+    warning(outputFileName, 
             " was overwritten in \"", 
-            outputDataDirectory, 
+            outputDirectoryName, 
             "\"."
             )
   }
-  
   write.table(outputDataFrame, file = outputFilePath, sep = " ", row.names = FALSE)
   
 }
@@ -82,14 +80,14 @@ writeOutputData <- function(outputDataFrame,
 ##  subject_test, X_test, y_test OR
 ##  subject_train, X_train, y_train
 ## N.B. This function uses eval() and parse() to make more modular.
-createDataSet <- function(dataDirectory=sourceDataDirectory, dataSetName) {
+createDataSet <- function(dataDirectory=sourceDataDirectoryName, dataSetName) {
   
   # Check first to see if the dataSetName is valid
   if (!(dataSetName %in% sourceDataSets)) {
     stop("The dataSetName \"", 
           dataSetName, 
           "\" does not exist. Processing Halted!", 
-          "\nPlease choose a value from the following: ", 
+          "\n\nPlease choose a value from the following: ", 
           paste(sourceDataSets, collapse = ", ")
          )
   }
@@ -131,18 +129,20 @@ createDataSet <- function(dataDirectory=sourceDataDirectory, dataSetName) {
   activities <- read.table(activityLabelFilePath, col.names = c("id", "name"), header = FALSE)
   ## And merge the values as another column (activity_name). See wk 3 lesson on how to accomplish this
   ## We can use dplyr or factor levels
-  ## TODO: implement the activity label.
+  ## ** TODO: implement the activity label. **
 
   df
 }
 
 ## Run Steps Below
 ## ---------------
-setupSourceData(dataDirectory)
+setupSourceData(localDirectoryName=sourceDirectory, 
+                remoteUrl=sourceRemoteUrl, 
+                localFileName=sourceLocalFileName)
 
 ## Create the Data Sets
-test <- createDataSet(dataDirectory, "test")
-train <- createDataSet(dataDirectory, "train")
+test <- createDataSet(dataDirectory=sourceDirectory, dataSetName = "test")
+train <- createDataSet(dataDirectory=sourceDirectory, dataSetName = "train")
 
 ## Now merge them
 fullDataSet <- rbind(test, train)
@@ -157,4 +157,6 @@ trimmed <- select(fullDataSet, subject_id, contains("mean"), contains("std"), ac
 # TODO: From the data set in step 4, creates a second, independent tidy data set with the average of each variable for each activity and each subject.
 
 ## TODO: Output the tidy data set and not the trimmed data set.
-writeOutputData(trimmed, outputDirectory, outputFileName)
+writeOutputData(outputDataFrame=trimmed, 
+                outputDirectoryName=outputDataDirectoryName, 
+                outputFileName=outputDataFileName)
