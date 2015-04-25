@@ -8,6 +8,7 @@ This repository contains files for the Getting and Cleaning Data Course Project.
 - [Submission Requirements](#submission-requirements)
 - [Approach](#approach)
 - [Running the Analysis](#running-the-analysis)
+  - [Required Packages](#required-packages)
 
 ## Course Instructions
 
