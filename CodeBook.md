@@ -6,6 +6,12 @@ For details on the approach used to generate the final "tidy" data set, please s
 
 The final output file should be 15480 Rows and 4 columns. Each row represents the mean of each measure by subject and activity.
 
+## Table of contents
+
+- [Output File Variables](#output-file-variables)
+- [Units](#units)
+- [Mapping against Source Data](#mapping-against-source-data)
+
 ## Output File Variables
 
 * *subject* is an integer from 1 to 30 indicating the test subject responsible for collecting the data
@@ -111,7 +117,7 @@ According to the source data:
 * Any accelerometer-based data (clearly labeled with 'accelerometer' in the measure variable) is in standard gravity units 'g'. 
 * Any gyroscope-based data (clearly labeled with 'gyroscope' in the measure variable) is in radians/second. 
   
-## Mapping vs. Source Data
+## Mapping against Source Data
 
 Since the structure of the "test" and "train" datasets are the same, we use <dataset> in the table below to denote replacement values.
 
