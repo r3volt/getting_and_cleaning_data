@@ -112,7 +112,9 @@ The Tidy Data Set (and the interim set) uses the Narrow Format with the followin
     1 "walking" "time_body_accelerometer_jerk_mean_Y" 0.0282721095884211
     1 "walking" "time_body_accelerometer_jerk_mean_Z" -0.00416840617789474
 
-Reading the output data set is outlined in [Reviewing the output](#reviewing-the-output)
+Reading the output data set is outlined in [Reviewing the output](#reviewing-the-output).
+
+The output data set code book can be found [here](CodeBook.md).
 
 ## Running the Analysis
 
