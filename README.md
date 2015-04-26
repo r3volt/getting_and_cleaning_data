@@ -43,6 +43,31 @@ You will be required to submit:
 
 This is a high-level description of the approach. 
 
+0. Setup the working data directory
+  0. Create a working data directory
+  0. Download the source data
+  0. Unzip the source data
+0. For each of the test and train data sets (using a single function for both):
+  0. For each of the "subject", "X", "y" files, read them in to a separate data frame
+  0. Attach names to each of the "subject", "X", "y" data frames
+    * For the X data frame, read the variables in from the "features.txt" file
+  0. Bind all of the data frames together into a single data frame
+  0. Create a new column called "activity_name" to include the activity_label
+    * Activity names are read from the "activity-labels.txt" file and are converted to lower case before mapping as a factor to the activity_id variable
+0. Merge the test and train data sets
+0. Trim the merged data set to only include subject, activity and mean or std variables
+0. Modify the names for the trimmed dataset to be cleared (and to fix errors in the source data)
+0. Gather the data set (effectively transposing from columns to rows)
+0. Summarize the Gathered data set (mean by subject by activity by measure)
+0. Write the output data file
+
+Where possible all involved or reusable pieces of code have been made modularized as parameterized functions. 
+
+* setupSourceData(localDirectoryName, remoteUrl, localFileName)
+* writeOutputData(outputDataFrame, outputDirectoryName, outputFileName)
+* createDataSet(dataDirectory, dataSetName)
+* cleanNames(df)
+
 In-depth detail on the output dataset can be found in the [CodeBook](CodeBook.md).
 
 #### Source Data
@@ -93,11 +118,11 @@ Reading the output data set is outlined in [Reviewing the output](#reviewing-the
 
 #### Required Packages
 
-The only required package is "dplyr" by Hadley Wickham which can be installed from CRAN by running...
+The only required packages are "dplyr" and "tidyr", both by Hadley Wickham, which can be installed from CRAN by running...
 
 ```
-install.pacakages("dplyr")
-install.pacakages("tidyr")
+install.packages("dplyr")
+install.packages("tidyr")
 ```
   
 N.B. curl must be installed on the system running download.file (since it uses HTTPS).
@@ -110,10 +135,9 @@ To use this script, simply source the script using the following:
 source("run_analysis.R")
 ```
 
-The script, by default, will create a data directory, download and unzip the source data and then create and write the output.
+The script, by default, will create a "./data" directory, download and unzip the source data and then create and write the output to and "./output" directory.
 
-Notes on specific approaches follow.
-
+See [Approach Outline](#approach-outline) for detail on the approach.
 
 ## Reviewing the Output
 
