@@ -152,10 +152,21 @@ fullDataSet <- rbind(test, train)
 trimmed <- select(fullDataSet, subject_id, contains("mean"), contains("std"), activity_id)
 
 # TODO: Use descriptive activity names to name the activities in the data set (done in step 1)
-
-# TODO: Appropriately labels the data set with descriptive variable names. 
+# Needs to be cleaned up so that we can generate a nice "Tidy" data set
 
 # TODO: From the data set in step 4, creates a second, independent tidy data set with the average of each variable for each activity and each subject.
+
+# produce a average for each combination of subject, activity, and variable 
+
+# Tidy Data Set should likely have the following columns:
+#   SubjectId
+#   ActivityName
+#   Measure (t/f)
+#   (Body/Gravity)
+#   Type (Acc/Jerk)
+#   Type (Acc/Jerk)
+#   Measure (mean/sd/NA)
+#   MeanValue (Generated)
 
 ## TODO: Output the tidy data set and not the trimmed data set.
 writeOutputData(outputDataFrame=trimmed, 
