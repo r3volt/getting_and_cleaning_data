@@ -103,7 +103,13 @@ The final output file should be 15480 Rows and 4 columns. Each row represents th
   * frequency_body_accelerometer_jerkmagnitide_std
   * frequency_body_gyrometer_magnitude_std
   * frequency_body_gyrometer_jerkmagnitide_std
-* *mean* the numeric value here is the mean of the measure by subject by activity
+* *mean* the numeric value here is the mean of the measure by subject by activity. 
+
+## Units 
+
+According to the source data:
+* Any accelerometer-based data (clearly labeled with 'accelerometer' in the measure variable) is in standard gravity units 'g'. 
+* Any gyroscope-based data (clearly labeled with 'gyroscope' in the measure variable) is in radians/second. 
   
 ## Mapping vs. Source Data
 
