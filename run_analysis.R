@@ -127,10 +127,11 @@ createDataSet <- function(dataDirectory=sourceDataDirectoryName, dataSetName) {
   ## Last Step here will be to read the Activity Labels from the source file
   activityLabelFilePath <- paste(dataDirectory, sourceDataDirectoryName, "activity_labels.txt", sep = "/")
   activities <- read.table(activityLabelFilePath, col.names = c("id", "name"), header = FALSE)
-  ## And merge the values as another column (activity_name). See wk 3 lesson on how to accomplish this
-  ## We can use dplyr or factor levels
-  ## ** TODO: implement the activity label. **
 
+  ## Now that we have the activities, we can use create an activity_name  
+  ## variable which uses the activity list to create a factor variable.
+  df$activity_name <- factor(df$activity_id, labels=activities$name)
+  
   df
 }
 
