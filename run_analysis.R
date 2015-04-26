@@ -1,4 +1,5 @@
 library(dplyr)
+library(tidyr)
 
 ## Default Source Variables
 sourceDirectory <- "./data"
@@ -130,8 +131,41 @@ createDataSet <- function(dataDirectory=sourceDataDirectoryName, dataSetName) {
 
   ## Now that we have the activities, we can use create an activity_name  
   ## variable which uses the activity list to create a factor variable.
-  df$activity_name <- factor(df$activity_id, labels=activities$name)
+  df$activity_name <- factor(df$activity_id, labels=tolower(activities$name))
   
+  df
+}
+
+## Perform a bunch of clean-up on the variable names
+cleanNames<-function(df) {
+  names<-names(df)
+
+  names[grep("^subject_id$", names)]<-"subject"
+  names[grep("^activity_name$", names)]<-"activity"
+  names<-sub("^t", "time_", names)
+  names<-sub("^f", "frequency_", names)
+  names<-sub("^angle.", "angle_", names)
+  ## Fix duplicated "Body" in name.
+  names<-sub("BodyBody", "Body", names)
+  names<-sub("_Body", "_body_", names)
+  names<-sub("_Gravity", "_gravity_", names)
+  names<-sub("_Acc", "_accelerometer_", names)
+  names<-sub("_Gyro\\.", "_gyrometer_", names)
+  names<-sub("_Gyro", "_gyrometer_", names)
+  names<-sub("_JerkMag", "_jerkmagnitide", names)
+  names<-sub("_Jerk", "_jerk", names)
+  names<-sub("_Mag", "_magnitude", names)
+  names<-sub("meanFreq", "meanfrequency", names)
+  names<-gsub("\\.", "_", names)
+  names<-gsub("_+", "_", names)
+  names<-gsub("_$", "", names)
+  names<-sub("_tBodyAccMean_", "_time_body_accelerometer_mean_", names)
+  names<-sub("_tBodyAccJerkMean_", "_time_body_accelerometer_jerk_mean_", names)
+  names<-sub("_tBodyGyroMean_", "_time_body_gyrometer_mean_", names)
+  names<-sub("_tBodyGyroJerkMean_", "_time_body_gyrometer_jerk_mean_", names)
+  names<-sub("gravityMean", "gravity_mean", names)
+  
+  names(df)<-names
   df
 }
 
@@ -148,27 +182,19 @@ train <- createDataSet(dataDirectory=sourceDirectory, dataSetName = "train")
 ## Now merge them
 fullDataSet <- rbind(test, train)
 
-# Extracts only the measurements on the mean and standard deviation for each measurement. 
-trimmed <- select(fullDataSet, subject_id, contains("mean"), contains("std"), activity_id)
+## Extracts only the measurements on the mean and standard deviation for each measurement. 
+trimmed <- select(fullDataSet, subject_id, contains("mean"), contains("std"), activity_name)
 
-# TODO: Use descriptive activity names to name the activities in the data set (done in step 1)
-# Needs to be cleaned up so that we can generate a nice "Tidy" data set
+## Clean up the names in the trimmed data set.
+trimmed <- cleanNames(trimmed)
 
-# TODO: From the data set in step 4, creates a second, independent tidy data set with the average of each variable for each activity and each subject.
+## Gather the dataset a bit for ease of summaqrization.
+gathered <- gather(trimmed, key = measure, value = value, -subject, -activity)
 
-# produce a average for each combination of subject, activity, and variable 
+## Create a second, independent tidy data set with the average of each variable for each activity and each subject.
+tidied <- gathered %>% group_by(subject, activity, measure) %>% summarise(mean = mean(value))
 
-# Tidy Data Set should likely have the following columns:
-#   SubjectId
-#   ActivityName
-#   Measure (t/f)
-#   (Body/Gravity)
-#   Type (Acc/Jerk)
-#   Type (Acc/Jerk)
-#   Measure (mean/sd/NA)
-#   MeanValue (Generated)
-
-## TODO: Output the tidy data set and not the trimmed data set.
-writeOutputData(outputDataFrame=trimmed, 
+## Output the tidy data set to the output directory.
+writeOutputData(outputDataFrame=tidied, 
                 outputDirectoryName=outputDataDirectoryName, 
                 outputFileName=outputDataFileName)
