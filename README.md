@@ -16,7 +16,7 @@ This repository contains files for the Getting and Cleaning Data Course Project.
 - [Running the Analysis](#running-the-analysis)
   - [Required Packages](#required-packages)
   - [Running the Script](#running-the-script)
-
+- [Reviewing the output](#reviewing-the-output)
 
 ## Course Instructions
 
@@ -74,8 +74,20 @@ I have included all variables which include "mean" or "std", ignoring case, for 
 
 #### Tidy Data Set
 
-...
+The Tidy Data Set (and the interim set) uses the Narrow Format with the following as an example of the output:
 
+    "subject" "activity" "measure" "mean"
+    1 "walking" "time_body_accelerometer_mean_X" 0.277330758736842
+    1 "walking" "time_body_accelerometer_mean_Y" -0.0173838185273684
+    1 "walking" "time_body_accelerometer_mean_Z" -0.111148103547368
+    1 "walking" "time_gravity_accelerometer_mean_X" 0.935223201473684
+    1 "walking" "time_gravity_accelerometer_mean_Y" -0.282165021263158
+    1 "walking" "time_gravity_accelerometer_mean_Z" -0.068102864
+    1 "walking" "time_body_accelerometer_jerk_mean_X" 0.0740416333157895
+    1 "walking" "time_body_accelerometer_jerk_mean_Y" 0.0282721095884211
+    1 "walking" "time_body_accelerometer_jerk_mean_Z" -0.00416840617789474
+
+Reading the output data set is outlined in [Reviewing the output](#reviewing-the-output)
 
 ## Running the Analysis
 
@@ -85,6 +97,7 @@ The only required package is "dplyr" by Hadley Wickham which can be installed fr
 
 ```
 install.pacakages("dplyr")
+install.pacakages("tidyr")
 ```
   
 N.B. curl must be installed on the system running download.file (since it uses HTTPS).
@@ -101,3 +114,13 @@ The script, by default, will create a data directory, download and unzip the sou
 
 Notes on specific approaches follow.
 
+
+## Reviewing the Output
+
+Following the successful run of the analysis script you can review the data output with the following R command, where "output/output.txt" is the location of the output file.
+
+```
+output <- read.table("output/output.txt", header = TRUE)
+```
+
+Information on the variables in the output data set is outlined in the [CodeBook](CodeBook.md).
